@@ -17,6 +17,7 @@ gem 'bugsnag-em'
 gem 'scrypt'
 gem 'newrelic_rpm'
 gem 'builder'
+gem 'rubocop', require: false
 
 group :test do
   gem 'rspec'
