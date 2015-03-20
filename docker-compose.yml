@@ -1,0 +1,30 @@
+web: &web
+  build: .
+  command: puma
+  volumes:
+    - .:/usr/src/app
+  ports:
+    - "5000:5000"
+  links:
+    - postgres
+    - redis
+blockworker:
+  <<: *web
+  command: sidekiq -q blocks -c 1 -r ./config/environment.rb
+  ports: []
+transactionworker:
+  <<: *web
+  command: sidekiq -q transactions -c 1 -r ./config/environment.rb
+  ports: []
+peermanager:
+  <<: *web
+  command: ruby bin/peer_manager.rb
+  ports: []
+postgres:
+  image: postgres:9.4
+  ports:
+    - "5432:21001"
+redis:
+  image: redis:2.8
+  ports:
+    - "6379:21002"
